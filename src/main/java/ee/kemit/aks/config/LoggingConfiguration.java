@@ -8,7 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.slf4j.MDC;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,9 +63,9 @@ public class LoggingConfiguration {
                 try {
 
                     String requestUrl = httpServletRequest.getRequestURI();
-                    MDC.put(REQUEST_ID, requestId);
-                    MDC.put(REQUEST_URL, requestUrl);
-                    MDC.put(TRACE_ID, traceId);
+                    ThreadContext.put(REQUEST_ID, requestId);
+                    ThreadContext.put(REQUEST_URL, requestUrl);
+                    ThreadContext.put(TRACE_ID, traceId);
 
                     log.info("{} {} {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI(),
                             queryString);
@@ -74,7 +74,7 @@ public class LoggingConfiguration {
                     String duration = String.valueOf(System.currentTimeMillis() - startTime);
                     log.info("{} {} {}, handling took: {} ms", httpServletRequest.getMethod(),
                             httpServletRequest.getRequestURI(), queryString, duration);
-                    MDC.clear();
+                    ThreadContext.clearAll();
                 }
             }
         };

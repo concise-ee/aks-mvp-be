@@ -61,7 +61,7 @@ public class XRoadService {
             }
 
             response = responseFuture.get();
-            //checkChangedAddresses(response.getResponseData());
+            checkChangedAddresses(response.getResponseData());
         } catch (Exception e) {
             log.error("Caught exception getting ADS change log", e);
         }
