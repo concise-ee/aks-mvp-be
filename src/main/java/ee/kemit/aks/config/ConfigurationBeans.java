@@ -12,6 +12,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import io.netty.channel.ChannelOption;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import reactor.netty.http.client.HttpClient;
 
 @Configuration
@@ -29,6 +31,16 @@ public class ConfigurationBeans {
 		return HttpClient.create()
 				.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT_MS)
 				.responseTimeout(Duration.ofMillis(TIMEOUT_MS));
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/api/**").allowedOrigins("http://localhost:4000");
+			}
+		};
 	}
 
 	@Bean(name = "auditingDateTimeProvider")
