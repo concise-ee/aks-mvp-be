@@ -1,0 +1,483 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xrd="http://x-road.eu/xsd/xroad.xsd" targetNamespace="http://www.maaamet.ee">
+    <import namespace="http://x-road.eu/xsd/xroad.xsd" schemaLocation="http://x-road.eu/xsd/xroad.xsd"/>
+    <simpleType name="adsMenOlekType">
+        <restriction base="string">
+            <enumeration value="K">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>kehtiv</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="O">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>ootel</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="T">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>tühistatud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsesitajaKlassifikaator">
+        <annotation>
+            <appinfo>
+                <xrd:title>adsesitaja klassifikaator</xrd:title>
+            </appinfo>
+        </annotation>
+        <restriction base="string">
+            <enumeration value="EHR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Ehitisregister</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="KNR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Kohanimeregister</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="MIS">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Maaregister</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsobjliikKlassifikaator">
+        <annotation>
+            <appinfo>
+                <xrd:title>adsobjliik klassifikaator</xrd:title>
+            </appinfo>
+        </annotation>
+        <restriction base="string">
+            <enumeration value="AY">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>asustusüksus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="CU">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>katastriüksus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="EE">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>elukondlik hoone</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="ER">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>eluruum</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="KN">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>kohanimi</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="LO">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>linnaosa</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="LP">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>liikluspind</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="ME">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>mitteelukondlik hoone</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="MK">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>maakond</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="MR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>mitteeluruum</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="OV">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>omavalitsus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="TT">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>teeregistri tee</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="VK">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>väikekoht</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <complexType name="adsTaseType">
+        <annotation>
+            <appinfo>
+                <xrd:title>Tase tüüp</xrd:title>
+            </appinfo>
+        </annotation>
+        <sequence>
+            <element name="kood" type="string" minOccurs="0">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Komponendi kood</xrd:title>
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="nimetus" type="string" minOccurs="0">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Komponendi nimi</xrd:title>
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="nimetus_liigiga" type="string" minOccurs="0">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Komponendi nimi koos liigisõnaga</xrd:title>
+                    </appinfo>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <complexType name="adsTaseSimpleType">
+        <annotation>
+            <appinfo>
+                <xrd:title>Tase tüüp</xrd:title>
+            </appinfo>
+        </annotation>
+        <sequence>
+            <element name="kood" type="string" minOccurs="0">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Komponendi kood</xrd:title>
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="nimetus" type="string" minOccurs="0">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Komponendi nimi</xrd:title>
+                    </appinfo>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <simpleType name="problStaatusType">
+        <restriction base="string">
+            <enumeration value="P">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>aktuaalne probleem</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="M">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>mitteaktuaalne probleem või märkus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsObjmviisType">
+        <restriction base="string">
+            <enumeration value="D">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>digitud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="K">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>kaardistatud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="M">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>mõõdistatud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="A">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>arvutatud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsSyndmusType">
+        <restriction base="string">
+            <enumeration value="I">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>lisamine</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="U">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>muutmine</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="D">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>tühistamine</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="R">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>taastamine</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="S">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>seoste kadumine</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="H">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>seotud objektide muudatus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="P">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>punkti muudatus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="B">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>huvipunkti nime muudatus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="N">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>sihtnumbri muudatus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="A">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>mitteametliku piirkonna nime muudatus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsOlekType">
+        <restriction base="string">
+            <enumeration value="K">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>kehtiv</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="V">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>vananenud versioon</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="T">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>tühistatud</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adsRegisterType">
+        <restriction base="string">
+            <enumeration value="RR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Rahvastikuregister</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="AR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Äriregister</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="KR">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Kinnistusraamat</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="EP">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Eesti Post</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="adstasemedKlassifikaator">
+        <annotation>
+            <appinfo>
+                <xrd:title>adstasemed klassifikaator</xrd:title>
+            </appinfo>
+        </annotation>
+        <restriction base="int">
+            <enumeration value="1">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>1 - maakond</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="2">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>2 - omavalitsus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="3">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>3 - asustusüksus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="4">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>4 - väikekoht</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="5">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>5 - liikluspind</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="6">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>6 - nimetus</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="7">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>7 - aadressinumber</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="8">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>8 - korterinumber</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="kujuGeomeetriaFormaatType">
+        <restriction base="string">
+            <enumeration value="WKT">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>WKT</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="GML">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Stringi kujul (escaped) GML</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+            <enumeration value="GeoJSON">
+                <annotation>
+                    <appinfo>
+                        <xrd:title>Json</xrd:title>
+                    </appinfo>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+</schema>
