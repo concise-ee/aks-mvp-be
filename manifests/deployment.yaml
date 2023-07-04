@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${CI_PROJECT_NAME}
+  namespace: ${NAMESPACE}
+  labels:
+    app: ${IMAGE_NAME}
+    projectCI: ${IMAGE_NAME}
+    namespaceCI: ${NAMESPACE}
+    servicecode: ${CMDB_SERVICE_CODE}?!?
+    environment: ${CI_ENVIRONMENT_NAME}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ${IMAGE_NAME}
+      environment: ${CI_ENVIRONMENT_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${IMAGE_NAME}
+        projectCI: ${CI_PROJECT_NAME}
+        namespaceCI: ${NAMESPACE}
+        environment: ${CI_ENVIRONMENT_NAME}
+        servicecode: ${CMDB_SERVICE_CODE}?!?
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      serviceAccountName: concise-aks
+      containers:
+        - name: ${IMAGE_NAME}
+          image: ${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}
+          env:
+            - name: JDK_JAVA_OPTIONS
+              value: ${JAVA_OPTS}
+            - name: AKS_CONCISE_DB_HOST
+              value: ${AKS_CONCISE_DB_HOST}
+            - name: AKS_CONCISE_DB_NAME
+              value: ${AKS_CONCISE_DB_NAME}
+            - name: AKS_CONCISE_DB_USER
+              value: ${AKS_CONCISE_DB_USER}
+            - name: AKS_CONCISE_DB_PWD
+              value: ${AKS_CONCISE_DB_PWD}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: ${MEMORY_REQUEST}
+              cpu: ${CPU_REQUEST}
+            limits:
+              memory: ${MEMORY_LIMIT}
+              cpu: ${CPU_LIMIT}
+          ports:
+            - containerPort: 8080
+              name: http
