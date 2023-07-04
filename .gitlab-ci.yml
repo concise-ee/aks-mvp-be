@@ -4,6 +4,9 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   APP: concise-aks
   IMAGE_NAME: aks-be
+  DOCKERHUB_REGISTRY: "$DOCKERHUB_REGISTRY"
+  DOCKERHUB_USER: "$DOCKERHUB_USER"
+  DOCKERHUB_PWD: "$DOCKERHUB_PWD"
 
 cache:
   paths:
@@ -16,8 +19,6 @@ stages:
 
 maven-package:
   stage: package
-  dependencies:
-    - maven-compile
   script:
     - 'mvn clean package -DskipTests'
   artifacts:
@@ -42,7 +43,7 @@ deploy:
   before_script:
     - unset KUBECONFIG
   variables:
-    NAMESPACE: concise-aks-test
+    NAMESPACE: concise-aks-dev
     CPU_LIMIT: 1000m
     MEMORY_LIMIT: 1024Mi
     CPU_REQUEST: 500m
