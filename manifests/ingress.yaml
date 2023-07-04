@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${CI_ENVIRONMENT_URL}
+  name: ${DEPLOY_ENV_URL}
   namespace: ${NAMESPACE}
 spec:
   rules:
-    - host: ${CI_ENVIRONMENT_URL}
+    - host: ${DEPLOY_ENV_URL}
       http:
         paths:
           - pathType: Prefix
             path: "/"
             backend:
               service:
-                name: ${CI_PROJECT_NAME}-svc
+                name: ${IMAGE_NAME}-svc
                 port:
                   number: 8080

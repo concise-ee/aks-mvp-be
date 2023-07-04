@@ -5,10 +5,6 @@ metadata:
   namespace: ${NAMESPACE}
   labels:
     app: ${IMAGE_NAME}
-    environment: ${CI_ENVIRONMENT_NAME}
-    servicecode: ${CMDB_SERVICE_CODE}
-    projectID: "${CI_PROJECT_ID}"
-    pipelineID: "${CI_PIPELINE_ID}"
 spec:
   ports:
     - port: 8080
@@ -16,4 +12,3 @@ spec:
       name: http
   selector:
     app: ${IMAGE_NAME}
-    environment: ${CI_ENVIRONMENT_NAME}

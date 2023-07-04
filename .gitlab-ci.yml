@@ -8,7 +8,7 @@ variables:
   DOCKERHUB_USER: ${DOCKERHUB_USER}
   DOCKERHUB_PWD: ${DOCKERHUB_PWD}
   NAMESPACE: ${NAMESPACE}
-  ENV_URL: ${ENV_URL}
+  DEPLOY_ENV_URL: ${DEPLOY_ENV_URL}
 
 cache:
   paths:
@@ -50,9 +50,6 @@ deploy:
     CPU_REQUEST: 500m
     MEMORY_REQUEST: 512Mi
     JAVA_OPTS: -Xmx1024m -Xms512m
-  environment:
-    name: dev
-    url: $ENV_URL
   script:
     - printenv
     - export IMAGE_PULL_SECRET=$IMAGE_NAME
