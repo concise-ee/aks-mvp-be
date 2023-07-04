@@ -4,9 +4,11 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   APP: concise-aks
   IMAGE_NAME: aks-be
-  DOCKERHUB_REGISTRY: "$DOCKERHUB_REGISTRY"
-  DOCKERHUB_USER: "$DOCKERHUB_USER"
-  DOCKERHUB_PWD: "$DOCKERHUB_PWD"
+  DOCKERHUB_REGISTRY: ${DOCKERHUB_REGISTRY}
+  DOCKERHUB_USER: ${DOCKERHUB_USER}
+  DOCKERHUB_PWD: ${DOCKERHUB_PWD}
+  NAMESPACE: ${NAMESPACE}
+  ENV_URL: ${ENV_URL}
 
 cache:
   paths:
@@ -43,7 +45,6 @@ deploy:
   before_script:
     - unset KUBECONFIG
   variables:
-    NAMESPACE: concise-aks-dev
     CPU_LIMIT: 1000m
     MEMORY_LIMIT: 1024Mi
     CPU_REQUEST: 500m
