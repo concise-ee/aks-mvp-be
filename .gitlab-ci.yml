@@ -2,13 +2,15 @@ image: maven:3.8.5-openjdk-17
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  APP: concise-aks
-  IMAGE_NAME: aks-be
+  #TODO: change vars
+  APP: cc-test
+  IMAGE_NAME: test-be
   DOCKERHUB_REGISTRY: ${DOCKERHUB_REGISTRY}
   DOCKERHUB_USER: ${DOCKERHUB_USER}
   DOCKERHUB_PWD: ${DOCKERHUB_PWD}
   NAMESPACE: ${NAMESPACE}
   DEPLOY_ENV_URL: ${DEPLOY_ENV_URL}
+  TAG_NAME: ${CI_COMMIT_SHORT_SHA}
 
 cache:
   paths:
@@ -17,7 +19,7 @@ cache:
 stages:
   - package
   - release
-  - deploy
+  #- deploy
 
 maven-package:
   stage: package
@@ -36,8 +38,12 @@ docker-build:
     - maven-package
   script:
     - docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PWD} ${DOCKERHUB_REGISTRY}
-    - docker build -t "${DOCKERHUB_REGISTRY}/${APP}/$IMAGE_NAME" -f ./docker/Dockerfile .
-    - docker push "${DOCKERHUB_REGISTRY}/${APP}/$IMAGE_NAME"
+    - docker build -t "${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
+    - docker push "${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}":"${TAG_NAME}"
+    - envsubst < ./manifests/serviceAccount.yaml
+    - envsubst < ./manifests/deployment.yaml
+    - envsubst < ./manifests/service.yaml
+    - envsubst < ./manifests/ingress.yaml
 
 deploy:
   stage: deploy
@@ -53,8 +59,9 @@ deploy:
   script:
     - printenv
     - export IMAGE_PULL_SECRET=$IMAGE_NAME
-    - kubectl -n ${NAMESPACE} get secret ${APP} || kubectl -n ${NAMESPACE} create secret docker-registry ${APP} --docker-server=$DOCKERHUB_REGISTRY --docker-username=$DOCKERHUB_USER --docker-password=$DOCKERHUB_PWD
-    - envsubst < ./manifests/serviceAccount.yaml | kubectl apply -f -
-    - envsubst < ./manifests/deployment.yaml | kubectl apply -f -
-    - envsubst < ./manifests/service.yaml | kubectl apply -f -
-    - envsubst < ./manifests/ingress.yaml | kubectl apply -f -
+     # TODO: script eeldab, et namespace on konfitud
+     # --> kubectal - kubectl -n ${NAMESPACE} get secret ${APP} || kubectl -n ${NAMESPACE} create secret docker-registry ${APP} --docker-server=$DOCKERHUB_REGISTRY --docker-username=$DOCKERHUB_USER --docker-password=$DOCKERHUB_PWD
+    # - envsubst < ./manifests/serviceAccount.yaml | kubectl apply -f -
+    # - envsubst < ./manifests/deployment.yaml | kubectl apply -f -
+    # - envsubst < ./manifests/service.yaml | kubectl apply -f -
+    # - envsubst < ./manifests/ingress.yaml | kubectl apply -f -
