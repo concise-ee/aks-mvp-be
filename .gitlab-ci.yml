@@ -38,8 +38,8 @@ docker-build:
     - maven-package
   script:
     - docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PWD} ${DOCKERHUB_REGISTRY}
-    - docker build -t "${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
-    - docker push "${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}":"${TAG_NAME}"
+    - docker build -t "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
+    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}"
     - envsubst < ./manifests/serviceAccount.yaml
     - envsubst < ./manifests/deployment.yaml
     - envsubst < ./manifests/service.yaml
