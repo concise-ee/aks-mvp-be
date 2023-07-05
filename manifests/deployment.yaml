@@ -26,7 +26,7 @@ spec:
       serviceAccountName: concise-aks
       containers:
         - name: ${IMAGE_NAME}
-          image: ${DOCKERHUB_REGISTRY}/${APP}/${IMAGE_NAME}:${TAG_NAME}
+          image: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG_NAME}
           env:
             - name: JDK_JAVA_OPTIONS
               value: ${JAVA_OPTS}
