@@ -49,17 +49,14 @@ public class LoggingConfiguration {
         return new OncePerRequestFilter() {
 
             @Override
-            protected void doFilterInternal(HttpServletRequest httpServletRequest,
-                                            HttpServletResponse httpServletResponse, FilterChain filterChain)
-                    throws ServletException, IOException {
+            protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
                 String requestId = LoggingConfiguration.this.getRequestId(httpServletRequest);
                 String traceId = LoggingConfiguration.this.getTraceId(httpServletRequest);
 
                 long startTime = System.currentTimeMillis();
 
-                String queryString = (httpServletRequest.getQueryString() == null) ? ""
-                        : ("qs:" + httpServletRequest.getQueryString());
+                String queryString = (httpServletRequest.getQueryString() == null) ? "" : ("qs:" + httpServletRequest.getQueryString());
                 try {
 
                     String requestUrl = httpServletRequest.getRequestURI();
@@ -67,13 +64,11 @@ public class LoggingConfiguration {
                     ThreadContext.put(REQUEST_URL, requestUrl);
                     ThreadContext.put(TRACE_ID, traceId);
 
-                    log.info("{} {} {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI(),
-                            queryString);
+                    log.info("{} {} {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI(), queryString);
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                 } finally {
                     String duration = String.valueOf(System.currentTimeMillis() - startTime);
-                    log.info("{} {} {}, handling took: {} ms", httpServletRequest.getMethod(),
-                            httpServletRequest.getRequestURI(), queryString, duration);
+                    log.info("{} {} {}, handling took: {} ms", httpServletRequest.getMethod(), httpServletRequest.getRequestURI(), queryString, duration);
                     ThreadContext.clearAll();
                 }
             }

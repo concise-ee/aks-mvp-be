@@ -44,6 +44,7 @@ docker-build:
     - envsubst < ./manifests/deployment.yaml
     - envsubst < ./manifests/service.yaml
     - envsubst < ./manifests/ingress.yaml
+    - printenv
 
 deploy:
   stage: deploy
