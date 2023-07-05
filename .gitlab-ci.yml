@@ -48,7 +48,7 @@ docker-build:
 
 deploy:
   stage: deploy
-  image: kubectl-helm-helmfile:latest
+  image: scalify/kubectl-helm-helmfile:kubectl-v1114-helm-v2110-helmfile-v0401
   before_script:
     - unset KUBECONFIG
   variables:
