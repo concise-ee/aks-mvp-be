@@ -3,7 +3,7 @@ image: maven:3.8.5-openjdk-17
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   #TODO: change vars
-  APP: cc-test
+  #APP: cc-test
   IMAGE_NAME: test-be
   DOCKERHUB_REGISTRY: ${DOCKERHUB_REGISTRY}
   DOCKERHUB_USER: ${DOCKERHUB_USER}
@@ -37,14 +37,14 @@ docker-build:
   dependencies:
     - maven-package
   script:
-    - docker build -t "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
     - docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PWD} ${DOCKERHUB_REGISTRY}
-    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}"
-    - envsubst < ./manifests/serviceAccount.yaml
-    - envsubst < ./manifests/deployment.yaml
-    - envsubst < ./manifests/service.yaml
-    - envsubst < ./manifests/ingress.yaml
-    - printenv
+    - docker build -t "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
+    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${IMAGE_NAME}":"${TAG_NAME}"
+    #- envsubst < ./manifests/serviceAccount.yaml
+    #- envsubst < ./manifests/deployment.yaml
+    #- envsubst < ./manifests/service.yaml
+    #- envsubst < ./manifests/ingress.yaml
+    #- printenv
 
 deploy:
   stage: deploy
