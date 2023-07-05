@@ -39,7 +39,7 @@ docker-build:
   script:
     - docker build -t "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}" -f ./docker/Dockerfile .
     - docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PWD} ${DOCKERHUB_REGISTRY}
-    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}${APP}/${IMAGE_NAME}":"${TAG_NAME}"
+    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USER}/${APP}/${IMAGE_NAME}":"${TAG_NAME}"
     - envsubst < ./manifests/serviceAccount.yaml
     - envsubst < ./manifests/deployment.yaml
     - envsubst < ./manifests/service.yaml
