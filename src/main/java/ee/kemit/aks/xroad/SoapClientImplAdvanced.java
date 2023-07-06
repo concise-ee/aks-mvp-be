@@ -360,12 +360,8 @@ public class SoapClientImplAdvanced implements SOAPClient {
 
 		HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
-		HostnameVerifier allHostsValid = new HostnameVerifier() {
-			@Override
-			public boolean verify(String hostname, SSLSession sslSession) {
-				return hostname.equals(sslSession.getPeerHost());
-			}
-		};
+		HostnameVerifier allHostsValid = (hostname, sslSession) -> hostname.equals(sslSession.getPeerHost());
+
 		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
 		log.debug("Using secure TLS to wrap the connection: " + this.keyStoreFileName);

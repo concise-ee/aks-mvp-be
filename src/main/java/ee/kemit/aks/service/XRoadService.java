@@ -39,7 +39,6 @@ public class XRoadService {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Transactional
     public void checkUpdatedAddresses() {
-        log.info("Starting to check if any property's address has changed");
         try {
 
             AdsObjektRequestDto adsObjektRequestDto = new AdsObjektRequestDto();
@@ -162,7 +161,6 @@ public class XRoadService {
                 final String value = successorForPredecessor;
                 log.info("Removing predecessor from list as successor already found");
                 adsDeletedAdsOids.removeIf(a -> a.equals(value));
-                System.out.println("tere");
             }
         }
     }
