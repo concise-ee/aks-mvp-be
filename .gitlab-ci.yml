@@ -1,3 +1,4 @@
+# KAS SIIN VAJA REGISTRY CONFITAVAKS TEHA?!?
 image: maven:3.8.5-openjdk-17
 
 variables:
@@ -42,7 +43,7 @@ docker-build:
 
 deploy:
   stage: deploy
-  image: scalify/kubectl-helm-helmfile:kubectl-v1114-helm-v2110-helmfile-v0401
+  image: thisiskj/kubectl-envsubst
   before_script:
     - unset KUBECONFIG
   variables:
