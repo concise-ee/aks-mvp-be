@@ -73,96 +73,101 @@ public class XRoadService {
 
         for (ADSobjmuudatusedResponse.ObjmuudatusedTulem.Muudatus muudatus : response.getObjmuudatusedTulem()
                 .getMuudatus()) {
+            try {
 
-            boolean isSuccessor = adsDeletedAdsOids.stream()
-                    .anyMatch(s -> muudatus.getEellased() != null && muudatus.getEellased().contains(s));
+                boolean isSuccessor = adsDeletedAdsOids.stream()
+                        .anyMatch(s -> muudatus.getEellased() != null && muudatus.getEellased().contains(s));
 
-            if (!activeAdsOids.contains(muudatus.getAdsOid()) && !isSuccessor) {
-                continue;
-            }
-
-            log.info("Found update for ADS_OID that is connected to a property in this system: {}",
-                    muudatus.getAdsOid());
-            log.info("Update is of type: {}", muudatus.getSyndmus().value());
-            log.info("Update change vector is: {}", muudatus.getMuutvektor());
-
-            if (muudatus.getSyndmus().equals(ObjSyndmusType.D) && muudatus.getJarglased() != null) {
-                log.info("Found deletion operation for ads_oid: {}", muudatus.getAdsOid());
-                adsDeletedAdsOids.add(muudatus.getAdsOid());
-                continue;
-            }
-
-            String successorForPredecessor = null;
-
-            if (isSuccessor) {
-                for (String predecessor : List.of(muudatus.getEellased().split(";"))) {
-                    if (adsDeletedAdsOids.contains(predecessor)) {
-                        successorForPredecessor = predecessor;
-                        log.info("Found successor: {} for predecessor: {}",
-                                muudatus.getAdsOid(),
-                                muudatus.getEellased());
-                    }
+                if (!activeAdsOids.contains(muudatus.getAdsOid()) && !isSuccessor) {
+                    continue;
                 }
-            }
 
-            boolean isExistingAdsOidAddressChange =
-                    muudatus.getSyndmus().equals(ObjSyndmusType.U) && muudatus.getMuutvektor() != null
-                            && muudatus.getMuutvektor().charAt(2) == '1';
-
-            if (isExistingAdsOidAddressChange || (isSuccessor && successorForPredecessor != null)) {
-
-                log.info("Found update of ads_oid where address changes: {}", muudatus.getLogId());
-
-                Optional<Address> persistedAddressEntity = addressRepository.findByAdsOidAndActiveTrue(isSuccessor ?
-                        successorForPredecessor :
+                log.info("Found update for ADS_OID that is connected to a property in this system: {}",
                         muudatus.getAdsOid());
+                log.info("Update is of type: {}", muudatus.getSyndmus().value());
+                log.info("Update change vector is: {}", muudatus.getMuutvektor());
 
-                if (persistedAddressEntity.isPresent() && muudatus.getAadressid().getAadress().size() > 0) {
-
-                    ADSobjmuudatusedResponse.ObjmuudatusedTulem.Muudatus.Aadressid.Aadress newAddressComponents = muudatus.getAadressid()
-                            .getAadress()
-                            .get(0);
-
-                    String countyName = newAddressComponents.getAdsTase1().getNimetus();
-                    String municipalityName = newAddressComponents.getAdsTase2().getNimetus();
-
-                    Optional<County> county = countyRepository.findByNameEqualsIgnoreCase(countyName);
-                    Optional<Municipality> municipality = municipalityRepository.findByNameContainingIgnoreCase(
-                            municipalityName);
-
-                    if (county.isEmpty() || municipality.isEmpty()) {
-                        log.error("Unable to connect address with components");
-                        continue;
-                    }
-
-                    Address currentlyActiveEntity = persistedAddressEntity.get();
-
-                    Accommodation accommodation = currentlyActiveEntity.getAccommodation();
-
-                    Address newAddress = new Address();
-                    newAddress.setAddress(muudatus.getTaisAadress());
-                    newAddress.setActive(true);
-                    newAddress.setAdsOid(muudatus.getAdsOid());
-                    newAddress.setCounty(county.get());
-                    newAddress.setMunicipality(municipality.get());
-
-                    // IN-ADS returns mathematical coordinates which we keep in database, ADS X-road services return geographical coordinates
-                    newAddress.setCentroidX(String.valueOf(muudatus.getTsentroidY()));
-                    newAddress.setCentroidY(String.valueOf(muudatus.getTsentroidX()));
-
-                    accommodation.getAddresses().forEach(a -> a.setActive(false));
-                    accommodation.getAddresses().add(newAddress);
-                    newAddress.setAccommodation(accommodation);
-
-                    log.info("Persisting new address for accommodation: {}", accommodation.getId());
-                    accommodationRepository.save(accommodation);
+                if (muudatus.getSyndmus().equals(ObjSyndmusType.D) && muudatus.getJarglased() != null) {
+                    log.info("Found deletion operation for ads_oid: {}", muudatus.getAdsOid());
+                    adsDeletedAdsOids.add(muudatus.getAdsOid());
+                    continue;
                 }
-            }
 
-            if (isSuccessor && successorForPredecessor != null) {
-                final String value = successorForPredecessor;
-                log.info("Removing predecessor from list as successor already found");
-                adsDeletedAdsOids.removeIf(a -> a.equals(value));
+                String successorForPredecessor = null;
+
+                if (isSuccessor) {
+                    for (String predecessor : List.of(muudatus.getEellased().split(";"))) {
+                        if (adsDeletedAdsOids.contains(predecessor)) {
+                            successorForPredecessor = predecessor;
+                            log.info("Found successor: {} for predecessor: {}",
+                                    muudatus.getAdsOid(),
+                                    muudatus.getEellased());
+                        }
+                    }
+                }
+
+                boolean isExistingAdsOidAddressChange =
+                        muudatus.getSyndmus().equals(ObjSyndmusType.U) && muudatus.getMuutvektor() != null
+                                && muudatus.getMuutvektor().charAt(2) == '1';
+
+                if (isExistingAdsOidAddressChange || (isSuccessor && successorForPredecessor != null)) {
+
+                    log.info("Found update of ads_oid where address changes: {}", muudatus.getLogId());
+
+                    List<Address> persistedAddressEntities = addressRepository.findByAdsOidAndActiveTrue(isSuccessor ?
+                            successorForPredecessor :
+                            muudatus.getAdsOid());
+
+                    if (!persistedAddressEntities.isEmpty() && muudatus.getAadressid().getAadress().size() > 0) {
+
+                        for (Address persistedAddressEntity : persistedAddressEntities) {
+
+                            ADSobjmuudatusedResponse.ObjmuudatusedTulem.Muudatus.Aadressid.Aadress newAddressComponents = muudatus.getAadressid()
+                                    .getAadress()
+                                    .get(0);
+
+                            String countyName = newAddressComponents.getAdsTase1().getNimetus();
+                            String municipalityName = newAddressComponents.getAdsTase2().getNimetus();
+
+                            Optional<County> county = countyRepository.findByNameEqualsIgnoreCase(countyName);
+                            Optional<Municipality> municipality = municipalityRepository.findByNameContainingIgnoreCase(
+                                    municipalityName);
+
+                            if (county.isEmpty() || municipality.isEmpty()) {
+                                log.error("Unable to connect address with components");
+                                continue;
+                            }
+
+                            Accommodation accommodation = persistedAddressEntity.getAccommodation();
+
+                            Address newAddress = new Address();
+                            newAddress.setAddress(muudatus.getTaisAadress());
+                            newAddress.setActive(true);
+                            newAddress.setAdsOid(muudatus.getAdsOid());
+                            newAddress.setCounty(county.get());
+                            newAddress.setMunicipality(municipality.get());
+
+                            // IN-ADS returns mathematical coordinates which we keep in database, ADS X-road services return geographical coordinates
+                            newAddress.setCentroidX(String.valueOf(muudatus.getTsentroidY()));
+                            newAddress.setCentroidY(String.valueOf(muudatus.getTsentroidX()));
+
+                            accommodation.getAddresses().forEach(a -> a.setActive(false));
+                            accommodation.getAddresses().add(newAddress);
+                            newAddress.setAccommodation(accommodation);
+
+                            log.info("Persisting new address for accommodation: {}", accommodation.getId());
+                            accommodationRepository.save(accommodation);
+                        }
+                    }
+                }
+
+                if (isSuccessor && successorForPredecessor != null) {
+                    final String value = successorForPredecessor;
+                    log.info("Removing predecessor from list as successor already found");
+                    adsDeletedAdsOids.removeIf(a -> a.equals(value));
+                }
+            } catch (Exception e) {
+                log.error("Caught exception", e);
             }
         }
     }

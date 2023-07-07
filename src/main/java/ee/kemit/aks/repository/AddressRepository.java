@@ -16,7 +16,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 	@Query("SELECT a.adsOid from Address a WHERE a.active = true")
 	List<String> findAllActiveAdsOidAddresses();
 
-	Optional<Address> findByAdsOidAndActiveTrue(String adsOid);
+	List<Address> findByAdsOidAndActiveTrue(String adsOid);
 
 	@Query("from Address adr WHERE adr.active = TRUE "
 			+ "AND (:countyId IS NULL OR adr.county.id = :countyId) "
