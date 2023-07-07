@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
 public class NewAccommodationDto extends NewAddressDto {
 
 	@NotNull
-	@Size(max = 500)
+	@Size(max = 255)
 	private String name;
 }
