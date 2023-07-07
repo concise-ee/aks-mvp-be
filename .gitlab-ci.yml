@@ -1,4 +1,3 @@
-# KAS SIIN VAJA REGISTRY CONFITAVAKS TEHA?!?
 image: maven:3.8.5-openjdk-17
 
 variables:

@@ -1,0 +1,1 @@
+ALTER TABLE accommodation ALTER COLUMN name TYPE VARCHAR(255);
