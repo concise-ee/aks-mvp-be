@@ -145,8 +145,10 @@ public class XRoadService {
                     newAddress.setAdsOid(muudatus.getAdsOid());
                     newAddress.setCounty(county.get());
                     newAddress.setMunicipality(municipality.get());
-                    newAddress.setCentroidX(String.valueOf(muudatus.getTsentroidX()));
-                    newAddress.setCentroidY(String.valueOf(muudatus.getTsentroidY()));
+
+                    // IN-ADS returns mathematical coordinates which we keep in database, ADS X-road services return geographical coordinates
+                    newAddress.setCentroidX(String.valueOf(muudatus.getTsentroidY()));
+                    newAddress.setCentroidY(String.valueOf(muudatus.getTsentroidX()));
 
                     accommodation.getAddresses().forEach(a -> a.setActive(false));
                     accommodation.getAddresses().add(newAddress);
