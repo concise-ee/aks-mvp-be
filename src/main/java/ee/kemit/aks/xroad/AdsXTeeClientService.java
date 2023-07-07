@@ -48,7 +48,7 @@ public class AdsXTeeClientService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> ServiceRequest createServiceRequest() throws XRd4JException {
-		log.debug("Using the following consumer values: " + instanceIdentifier + " / " + consumerMemberClass + " / "
+		log.info("Using the following consumer values: " + instanceIdentifier + " / " + consumerMemberClass + " / "
 				+ consumerCode + " / " + consumerSubSystem);
 
 		ConsumerMember consumerMember = new ConsumerMember(instanceIdentifier,

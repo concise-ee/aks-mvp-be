@@ -17,7 +17,6 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.xml.soap.SOAPConnection;
@@ -84,7 +83,7 @@ public class SoapClientImplAdvanced implements SOAPClient {
 
 	/**
 	 * Sends the given message to the specified endpoint and blocks until it has returned the response. Null is returned
-	 * if the given URL is malformed or if sending the message fails NB! Uses regular HTTP to send the requests
+	 * if the given URL is malformed or if sending the message fails
 	 *
 	 * @param request the SOAPMessage object to be sent
 	 * @param url     URL that identifies where the message should be sent
