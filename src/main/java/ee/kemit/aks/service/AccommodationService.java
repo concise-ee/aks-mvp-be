@@ -14,6 +14,7 @@ import ee.kemit.aks.repository.MunicipalityRepository;
 import ee.kemit.aks.util.ModelMapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class AccommodationService {
     }
 
     public List<AddressDto> getAccommodationHistoricAddresses(Long accommodationId) {
-        return ModelMapperUtil.mapAll(addressRepository.findAllByAccommodation_IdAndActiveFalseOrderByCreatedAtDesc(
+        return ModelMapperUtil.mapAll(addressRepository.findAllByAccommodation_IdOrderByCreatedAtDesc(
                 accommodationId), AddressDto.class);
     }
 
@@ -78,10 +79,10 @@ public class AccommodationService {
 
     @Transactional
     public List<AccommodationDto> getAccommodationsWithFilter(AccommodationFilter filter) {
-        List<ee.kemit.aks.model.Address> filteredAddresses = addressRepository.findAddressesByFilter(filter.getCountyId(), filter.getMunicipalityId(), filter.getCreatedAt());
+        List<ee.kemit.aks.model.Address> filteredAddresses = addressRepository.findAddressesByFilter(filter.getSearchString()
+                .toLowerCase(), filter.getCountyId(), filter.getMunicipalityId(), filter.getCreatedAt());
 
-        List<Accommodation> relatedProperties = filteredAddresses
-                .stream()
+        List<Accommodation> relatedProperties = filteredAddresses.stream()
                 .map(ee.kemit.aks.model.Address::getAccommodation)
                 .toList();
 
@@ -95,8 +96,7 @@ public class AccommodationService {
         }
         List<ee.kemit.aks.model.Address> filteredAddresses = addressRepository.findAddressesBySearchString(searchTerm);
 
-        List<Accommodation> relatedProperties = filteredAddresses
-                .stream()
+        List<Accommodation> relatedProperties = filteredAddresses.stream()
                 .map(ee.kemit.aks.model.Address::getAccommodation)
                 .toList();
 
