@@ -11,5 +11,4 @@ public class AccommodationFilter {
 	private Long countyId;
 	private Long municipalityId;
 	private LocalDate createdAt;
-	private String searchString;
 }
